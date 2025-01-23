@@ -140,6 +140,54 @@ export function BlinkForm({ onClose }: BlinkFormProps) {
             />
           </div>
 
+          {apiLink && (
+            <div className="mt-8 space-y-4 p-4 rounded-xl bg-violet-500/10 border border-violet-500/30">
+              <div className="text-center">
+                <h3 className="text-lg font-semibold bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
+                  API Information
+                </h3>
+                <p className="mt-1 text-sm text-gray-400">Your Blink API endpoint is ready</p>
+              </div>
+
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-200">API Endpoint</label>
+                <div className="relative flex items-center">
+                  <code className="block w-full text-sm text-white bg-white/5 p-3 rounded-xl border border-violet-500/30">
+                    https://blink-back.onrender.com{apiLink}
+                  </code>
+                  <button
+                    onClick={handleCopyLink}
+                    className="absolute right-3 p-2 text-gray-400 hover:text-white transition-colors"
+                    title={copied ? "Copied!" : "Copy to clipboard"}
+                  >
+                    {copied ? <Check size={16} /> : <Copy size={16} />}
+                  </button>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-200">Required Headers</label>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between items-center bg-white/5 p-2 rounded-lg">
+                    <code className="text-violet-400">X-Action-Version</code>
+                    <code className="text-gray-400">1</code>
+                  </div>
+                  <div className="flex justify-between items-center bg-white/5 p-2 rounded-lg">
+                    <code className="text-violet-400">X-Blockchain-Ids</code>
+                    <code className="text-gray-400">solana</code>
+                  </div>
+                </div>
+              </div>
+
+              <button
+                onClick={handleTestApi}
+                className="w-full mt-4 px-4 py-2 rounded-xl text-white bg-gradient-to-r from-violet-500 to-fuchsia-500 hover:from-violet-600 hover:to-fuchsia-600 transition-all duration-200 flex items-center justify-center gap-2 text-sm"
+              >
+                Test API <ExternalLink size={16} />
+              </button>
+            </div>
+          )}
+
           <div className="space-y-2">
             <label className="block text-sm font-medium text-gray-200">Description</label>
             <textarea
