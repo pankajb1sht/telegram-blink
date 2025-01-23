@@ -115,8 +115,15 @@ export function BlinkForm({ onClose }: { onClose: () => void }) {
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || 'Failed to create blink');
-      setBlinkData(data);
-      setShowPreview(true);
+      // Ensure the route uses the correct backend URL
+    const correctedBlinkData = {
+      ...data,
+      route: `https://blink-back.onrender.com${data.route}`,  // Add the backend base URL
+    };
+
+    setBlinkData(correctedBlinkData);
+    setShowPreview(true);
+     
     } catch (error) {
       setErrors([{ field: 'submit', message: error instanceof Error ? error.message : 'An unexpected error occurred' }]);
     } finally {
