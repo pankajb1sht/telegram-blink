@@ -44,7 +44,7 @@ export function BlinkForm({ onClose }: BlinkFormProps) {
     };
 
     try {
-      const response = await fetch('https://blink-back.onrender.com/api/blink/create', {
+      const response = await fetch('http://localhost:5000/api/blink/create', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -54,12 +54,13 @@ export function BlinkForm({ onClose }: BlinkFormProps) {
 
       if (response.ok) {
         const data = await response.json();
-        const generatedLink = `${window.location.origin}/api/${data.channelName}`;
+        const generatedLink = data.route;
         setApiLink(generatedLink);
         setIsPopupVisible(true);
         onClose();
       } else {
-        setError('Failed to create blink. Please try again.');
+        const errorData = await response.json();
+        setError(errorData.error || 'Failed to create blink. Please try again.');
       }
     } catch (error) {
       setError('An error occurred. Please check your connection and try again.');
