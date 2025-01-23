@@ -62,7 +62,7 @@ export function BlinkPreview({ blink, onClose }: BlinkPreviewProps) {
             <div className="flex justify-between items-center">
               <span className="text-gray-300">Route:</span>
               <a href={blink.route} className="text-fuchsia-400 hover:underline" target="_blank" rel="noopener noreferrer">
-                {blink.route}
+                {"https://blink-back.onrender.com${data.route}"}
               </a>
             </div>
           </div>
