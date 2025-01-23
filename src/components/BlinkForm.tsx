@@ -59,12 +59,14 @@ export function BlinkPreview({ blink, onClose }: BlinkPreviewProps) {
               <span className="text-gray-300">Public Key:</span>
               <span className="text-sm truncate max-w-[200px]">{blink.publicKey}</span>
             </div>
-            <div className="flex justify-between items-center">
-              <span className="text-gray-300">Route:</span>
-              
-  {`https://blink-back.onrender.com${blink.route}`}
+           <div className="flex justify-between items-center">
+  <span className="text-gray-300">Route:</span>
+  <span className="text-fuchsia-400 hover:text-purple-500 hover:underline"
+        style={{ textShadow: '0 0 5px rgba(139, 92, 246), 0 0 10px rgba(139, 92, 246), 0 0 20px rgba(139, 92, 246)' }}>
+    {`https://blink-back.onrender.com${blink.route}`}
+  </span>
+</div>
 
-            </div>
           </div>
         </div>
       </div>
