@@ -13,7 +13,7 @@ interface FormData {
 interface BlinkFormProps {
   onClose: () => void;
 }
-const booleaning = false;
+
 
 export function BlinkForm({ onClose }: BlinkFormProps) {
   const [formData, setFormData] = useState<FormData>({
@@ -35,7 +35,7 @@ export function BlinkForm({ onClose }: BlinkFormProps) {
     e.preventDefault();
     setIsLoading(true);
     setError('');
-    booleaning = true;
+  
     const requestData = {
       channelName: formData.channelName,
       description: formData.description,
