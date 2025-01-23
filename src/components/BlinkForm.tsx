@@ -13,6 +13,7 @@ interface FormData {
 interface BlinkFormProps {
   onClose: () => void;
 }
+const booleaning = false;
 
 export function BlinkForm({ onClose }: BlinkFormProps) {
   const [formData, setFormData] = useState<FormData>({
@@ -34,7 +35,7 @@ export function BlinkForm({ onClose }: BlinkFormProps) {
     e.preventDefault();
     setIsLoading(true);
     setError('');
-
+    booleaning = true;
     const requestData = {
       channelName: formData.channelName,
       description: formData.description,
@@ -140,7 +141,7 @@ export function BlinkForm({ onClose }: BlinkFormProps) {
             />
           </div>
 
-          {apiLink && (
+          {booleaning && (
             <div className="mt-8 space-y-4 p-4 rounded-xl bg-violet-500/10 border border-violet-500/30">
               <div className="text-center">
                 <h3 className="text-lg font-semibold bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
