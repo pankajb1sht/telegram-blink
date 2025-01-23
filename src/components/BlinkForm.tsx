@@ -14,7 +14,6 @@ interface BlinkFormProps {
   onClose: () => void;
 }
 
-
 export function BlinkForm({ onClose }: BlinkFormProps) {
   const [formData, setFormData] = useState<FormData>({
     channelName: '',
@@ -30,12 +29,13 @@ export function BlinkForm({ onClose }: BlinkFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [copied, setCopied] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
-  
+    setIsSubmitted(true);
     const requestData = {
       channelName: formData.channelName,
       description: formData.description,
@@ -60,7 +60,6 @@ export function BlinkForm({ onClose }: BlinkFormProps) {
         const data = await response.json();
         setApiLink(data.route);
         setIsPopupVisible(true);
-        onClose();
       } else {
         const errorData = await response.json();
         setError(errorData.error || 'Failed to create blink. Please try again.');
@@ -141,7 +140,7 @@ export function BlinkForm({ onClose }: BlinkFormProps) {
             />
           </div>
 
-          {booleaning && (
+          {isSubmitted && (
             <div className="mt-8 space-y-4 p-4 rounded-xl bg-violet-500/10 border border-violet-500/30">
               <div className="text-center">
                 <h3 className="text-lg font-semibold bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
