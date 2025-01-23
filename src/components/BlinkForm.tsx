@@ -104,8 +104,6 @@ export function BlinkForm({ onClose }: BlinkFormProps) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-Action-Version': '1',
-          'X-Blockchain-Ids': 'solana'
         },
         body: JSON.stringify(requestData),
       });
