@@ -44,7 +44,7 @@ export function BlinkForm({ onClose }: BlinkFormProps) {
     };
 
     try {
-      const response = await fetch('http://localhost:5000/api/blink/create', {
+      const response = await fetch('https://blink-back.onrender.com/api/blink/create', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
