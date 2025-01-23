@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Upload, AlertCircle, Copy, Check, ExternalLink } from 'lucide-react';
+import { PublicKey } from '@solana/web3.js';
 
 interface FormData {
   channelName: string;
@@ -13,6 +14,33 @@ interface FormData {
 interface BlinkFormProps {
   onClose: () => void;
 }
+
+const isValidUrl = (url: string): boolean => {
+  try {
+    new URL(url);
+    return url.startsWith('http://') || url.startsWith('https://');
+  } catch {
+    return false;
+  }
+};
+
+const isValidTelegramLink = (url: string): boolean => {
+  try {
+    const parsed = new URL(url);
+    return parsed.hostname === 't.me' || parsed.hostname === 'telegram.me';
+  } catch {
+    return false;
+  }
+};
+
+const isValidPublicKey = (key: string): boolean => {
+  try {
+    new PublicKey(key);
+    return true;
+  } catch {
+    return false;
+  }
+};
 
 export function BlinkForm({ onClose }: BlinkFormProps) {
   const [formData, setFormData] = useState<FormData>({
@@ -31,11 +59,41 @@ export function BlinkForm({ onClose }: BlinkFormProps) {
   const [copied, setCopied] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
+  const validateForm = (): string | null => {
+    if (!formData.channelName.match(/^[a-zA-Z0-9-_\s]{3,50}$/)) {
+      return 'Channel name must be 3-50 characters and contain only letters, numbers, spaces, hyphens, and underscores.';
+    }
+    if (formData.description.trim().length < 10 || formData.description.length > 1000) {
+      return 'Description must be between 10 and 1000 characters';
+    }
+    const fee = parseFloat(formData.fee);
+    if (isNaN(fee) || fee <= 0 || fee > 1000) {
+      return 'Fee must be a number between 0 and 1000.';
+    }
+    if (!isValidPublicKey(formData.publicKey)) {
+      return 'Invalid Solana public key format.';
+    }
+    if (formData.coverImage && !isValidUrl(formData.coverImage)) {
+      return 'Invalid cover image URL. Must start with http:// or https://';
+    }
+    if (!isValidTelegramLink(formData.telegramLink)) {
+      return 'Invalid Telegram link. Must be a t.me or telegram.me URL';
+    }
+    return null;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
-    setIsSubmitted(true);
+    
+    const validationError = validateForm();
+    if (validationError) {
+      setError(validationError);
+      setIsLoading(false);
+      return;
+    }
+
     const requestData = {
       channelName: formData.channelName,
       description: formData.description,
@@ -56,16 +114,18 @@ export function BlinkForm({ onClose }: BlinkFormProps) {
         body: JSON.stringify(requestData),
       });
 
+      const data = await response.json();
+      
       if (response.ok) {
-        const data = await response.json();
         setApiLink(data.route);
+        setIsSubmitted(true);
         setIsPopupVisible(true);
+        setError(''); // Clear any existing errors
       } else {
-        const errorData = await response.json();
-        setError(errorData.error || 'Failed to create blink. Please try again.');
+        setError(data.error || 'Failed to create blink. Please try again.');
       }
     } catch (error) {
-      setError('An error occurred. Please check your connection and try again.');
+      setError('Network error. Please check your connection and try again.');
     } finally {
       setIsLoading(false);
     }
@@ -79,11 +139,20 @@ export function BlinkForm({ onClose }: BlinkFormProps) {
   const handleCopyLink = async () => {
     if (apiLink) {
       try {
-        await navigator.clipboard.writeText(`https://blink-back.onrender.com${apiLink}`);
+        const fullUrl = `https://blink-back.onrender.com${apiLink}`;
+        await navigator.clipboard.writeText(fullUrl);
         setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
+        // Show success message temporarily
+        const successMessage = document.createElement('div');
+        successMessage.className = 'fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg z-50';
+        successMessage.textContent = 'Copied to clipboard!';
+        document.body.appendChild(successMessage);
+        setTimeout(() => {
+          successMessage.remove();
+          setCopied(false);
+        }, 2000);
       } catch (err) {
-        console.error('Failed to copy:', err);
+        setError('Failed to copy to clipboard');
       }
     }
   };
@@ -97,11 +166,19 @@ export function BlinkForm({ onClose }: BlinkFormProps) {
             'X-Blockchain-Ids': 'solana'
           }
         });
+        const data = await response.json();
         if (!response.ok) {
-          throw new Error('API test failed');
+          throw new Error(data.error || 'API test failed');
         }
+        setError(''); // Clear any existing errors
+        // Show success message temporarily
+        const successMessage = document.createElement('div');
+        successMessage.className = 'fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg z-50';
+        successMessage.textContent = 'API test successful!';
+        document.body.appendChild(successMessage);
+        setTimeout(() => successMessage.remove(), 3000);
       } catch (err) {
-        setError('Failed to test API endpoint');
+        setError(err instanceof Error ? err.message : 'Failed to test API endpoint. Please try again.');
       }
     }
   };
