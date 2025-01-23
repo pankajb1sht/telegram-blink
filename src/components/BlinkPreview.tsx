@@ -42,7 +42,7 @@ export function BlinkPreview({ blink, onClose }: BlinkPreviewProps) {
                 target="_blank" 
                 rel="noopener noreferrer"
               >
-                {"https://blink-back.onrender.com${data.route}"}
+                {https://blink-back.onrender.com${data.route}}
               </a>
             </div>
           </div>
