@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Upload, AlertCircle, Copy, Check, ExternalLink } from 'lucide-react';
-import { PublicKey } from '@solana/web3.js';
 
 interface FormData {
   channelName: string;
@@ -34,12 +33,9 @@ const isValidTelegramLink = (url: string): boolean => {
 };
 
 const isValidPublicKey = (key: string): boolean => {
-  try {
-    new PublicKey(key);
-    return true;
-  } catch {
-    return false;
-  }
+  // Solana public keys are base58 encoded and 32-44 characters long
+  const base58Regex = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/;
+  return base58Regex.test(key.trim());
 };
 
 export function BlinkForm({ onClose }: BlinkFormProps) {
