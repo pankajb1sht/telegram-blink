@@ -7,6 +7,7 @@ interface FormData {
   fee: string;
   publicKey: string;
   coverImage: string;
+  telegramLink: string;
 }
 
 interface BlinkFormProps {
@@ -20,6 +21,7 @@ export function BlinkForm({ onClose }: BlinkFormProps) {
     fee: '',
     publicKey: '',
     coverImage: '',
+    telegramLink: '',
   });
 
   const [apiLink, setApiLink] = useState<string | null>(null);
@@ -38,6 +40,7 @@ export function BlinkForm({ onClose }: BlinkFormProps) {
       fee: parseFloat(formData.fee),
       publicKey: formData.publicKey,
       coverImage: formData.coverImage,
+      telegramLink: formData.telegramLink,
     };
 
     try {
@@ -164,6 +167,19 @@ export function BlinkForm({ onClose }: BlinkFormProps) {
               </div>
             )}
           </div>
+
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-gray-200">Telegram Link</label>
+            <input
+              type="text"
+              name="telegramLink"
+              value={formData.telegramLink}
+              onChange={handleInputChange}
+              className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-violet-500/30 text-white placeholder-gray-500 focus:border-violet-500 focus:ring-1 focus:ring-violet-500 transition-all duration-200"
+              placeholder="Enter Telegram link"
+              required
+            />
+          </div>
         </div>
 
         <div className="flex justify-end space-x-4 pt-6">
@@ -188,19 +204,8 @@ export function BlinkForm({ onClose }: BlinkFormProps) {
         <div className="fixed inset-0 flex justify-center items-center bg-black/60 backdrop-blur-sm z-50">
           <div className="bg-black/90 p-8 rounded-xl space-y-4 max-w-lg mx-auto border border-violet-500/30">
             <h3 className="text-xl font-semibold text-white">Your Blink was created!</h3>
-            <p className="text-sm text-gray-300">Here is the link to your Blink:</p>
-            <p className="text-lg text-violet-400 font-medium break-words p-4 bg-violet-500/10 rounded-lg">{apiLink}</p>
-            <button
-              onClick={() => {
-                if (apiLink) {
-                  const tweetUrl = `https://twitter.com/intent/tweet?text=Check%20out%20my%20new%20Blink%20channel%20at%20${encodeURIComponent(apiLink)}`;
-                  window.open(tweetUrl, '_blank');
-                }
-              }}
-              className="mt-4 px-6 py-2.5 w-full rounded-xl text-white bg-gradient-to-r from-violet-500 via-fuchsia-500 to-pink-500 hover:from-violet-600 hover:via-fuchsia-600 hover:to-pink-600 transition-all duration-200"
-            >
-              Share on X (Twitter)
-            </button>
+            <p className="text-white">Here is the API link to your channel:</p>
+            <code className="block text-white bg-black/20 p-2 rounded-md">{apiLink}</code>
             <button
               onClick={() => setIsPopupVisible(false)}
               className="mt-4 px-6 py-2.5 w-full rounded-xl text-white border border-violet-500/50 hover:bg-violet-500/20 transition-all duration-200"
