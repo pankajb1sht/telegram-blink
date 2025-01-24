@@ -324,7 +324,7 @@ export function BlinkForm({ onClose }: BlinkFormProps) {
             <label className="block text-sm font-medium text-gray-200">Telegram Link</label>
             <input
               type="text"
-              name="telegramLink"
+              name="link"
               value={formData.link}
               onChange={handleInputChange}
               className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-violet-500/30 text-white placeholder-gray-500 focus:border-violet-500 focus:ring-1 focus:ring-violet-500 transition-all duration-200"
