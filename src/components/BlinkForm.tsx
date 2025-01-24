@@ -7,7 +7,7 @@ interface FormData {
   fee: string;
   publicKey: string;
   coverImage: string;
-  telegramLink: string;
+  link: string;
 }
 
 interface BlinkFormProps {
@@ -45,7 +45,7 @@ export function BlinkForm({ onClose }: BlinkFormProps) {
     fee: '',
     publicKey: '',
     coverImage: '',
-    telegramLink: '',
+    link: '',
   });
 
   const [apiLink, setApiLink] = useState<string | null>(null);
@@ -72,7 +72,7 @@ export function BlinkForm({ onClose }: BlinkFormProps) {
     if (formData.coverImage && !isValidUrl(formData.coverImage)) {
       return 'Invalid cover image URL. Must start with http:// or https://';
     }
-    if (!isValidTelegramLink(formData.telegramLink)) {
+    if (!isValidTelegramLink(formData.link)) {
       return 'Invalid Telegram link. Must be a t.me or telegram.me URL';
     }
     return null;
@@ -96,7 +96,7 @@ export function BlinkForm({ onClose }: BlinkFormProps) {
       fee: parseFloat(formData.fee),
       publicKey: formData.publicKey,
       coverImage: formData.coverImage || 'https://example.com/default-icon.png',
-      telegramLink: formData.telegramLink,
+      link: formData.link,
     };
 
     try {
@@ -325,7 +325,7 @@ export function BlinkForm({ onClose }: BlinkFormProps) {
             <input
               type="text"
               name="telegramLink"
-              value={formData.telegramLink}
+              value={formData.link}
               onChange={handleInputChange}
               className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-violet-500/30 text-white placeholder-gray-500 focus:border-violet-500 focus:ring-1 focus:ring-violet-500 transition-all duration-200"
               placeholder="Enter Telegram link"
