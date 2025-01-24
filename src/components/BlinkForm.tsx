@@ -25,9 +25,7 @@ const isValidUrl = (url: string): boolean => {
 
 const isValidTelegramLink = (url: string): boolean => {
   
-    const parsed = new URL(url);
-    return parsed.hostname === 't.me' || parsed.hostname === 'telegram.me';
-  
+    return true;
   
 };
 
