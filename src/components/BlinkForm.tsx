@@ -24,12 +24,11 @@ const isValidUrl = (url: string): boolean => {
 };
 
 const isValidTelegramLink = (url: string): boolean => {
-  try {
+  
     const parsed = new URL(url);
     return parsed.hostname === 't.me' || parsed.hostname === 'telegram.me';
-  } catch {
-    return false;
-  }
+  
+  
 };
 
 const isValidPublicKey = (key: string): boolean => {
