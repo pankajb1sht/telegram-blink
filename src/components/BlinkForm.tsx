@@ -7,7 +7,7 @@ interface FormData {
   fee: string;
   publicKey: string;
   coverImage: string;
-  link: string;
+  telegramLink: string;
 }
 
 interface BlinkFormProps {
@@ -42,7 +42,7 @@ export function BlinkForm({ onClose }: BlinkFormProps) {
     fee: '',
     publicKey: '',
     coverImage: '',
-    link: '',
+    telegramLink: '',
   });
 
   const [apiLink, setApiLink] = useState<string | null>(null);
@@ -69,7 +69,7 @@ export function BlinkForm({ onClose }: BlinkFormProps) {
     if (formData.coverImage && !isValidUrl(formData.coverImage)) {
       return 'Invalid cover image URL. Must start with http:// or https://';
     }
-    if (!isValidTelegramLink(formData.link)) {
+    if (!isValidTelegramLink(formData.telegramLink)) {
       return 'Invalid Telegram link. Must be a t.me or telegram.me URL';
     }
     return null;
@@ -93,7 +93,7 @@ export function BlinkForm({ onClose }: BlinkFormProps) {
       fee: parseFloat(formData.fee),
       publicKey: formData.publicKey,
       coverImage: formData.coverImage || 'https://example.com/default-icon.png',
-      link: formData.link,
+      link: formData.telegramLink,
     };
 
     try {
@@ -101,6 +101,8 @@ export function BlinkForm({ onClose }: BlinkFormProps) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'X-Action-Version': '1',
+          'X-Blockchain-Ids': 'solana'
         },
         body: JSON.stringify(requestData),
       });
@@ -321,11 +323,11 @@ export function BlinkForm({ onClose }: BlinkFormProps) {
             <label className="block text-sm font-medium text-gray-200">Telegram Link</label>
             <input
               type="text"
-              name="link"
-              value={formData.link}
+              name="telegramLink"
+              value={formData.telegramLink}
               onChange={handleInputChange}
               className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-violet-500/30 text-white placeholder-gray-500 focus:border-violet-500 focus:ring-1 focus:ring-violet-500 transition-all duration-200"
-              placeholder="Enter Telegram link"
+              placeholder="Enter Telegram link (e.g., https://t.me/yourchannel)"
               required
             />
           </div>
